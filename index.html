@@ -19,7 +19,35 @@
 
 							ex_rates = JSON.parse(result);
 							document.getElementById("Exdate").innerHTML = "Exchange Rates from " + ex_rates["date"];
-							document.getElementById("showEXrate").innerHTML = "Team Name: " + 
+							document.getElementById("showEXrate").innerHTML = "EUR: 1.0 <--> \n" + pick +": "+
+							ex_rates["rates"][pick];
+						}
+						else if (data.readyState == 4 && data.status != 200) {
+							document.getElementById("showEXrate").innerHTML = "Error";
+						}
+						else if (data.readyState == 3){
+							document.getElementById("showEXrate").innerHTML = "Nope";
+						}
+					}
+				data.send();
+				console.log("4 - Request sent");
+				}
+				function changeDate(){
+					var pick = document.getElementById("pick_Curr").value;
+					var date_pick = document.getElementById("date_").value;
+					data = new XMLHttpRequest();
+					console.log("1 - request object created");
+	
+					data.open("GET", "http://data.fixer.io/api/"+date_pick+"?access_key=439578292bebc7430c6ad9e8c3015bae&format=1");
+	
+					console.log("2 - opened request file");
+					data.onreadystatechange = function(){
+						if (data.readyState == 4 && data.status == 200){
+							result = data.responseText;
+
+							ex_rates = JSON.parse(result);
+							document.getElementById("Exdate").innerHTML = "Exchange Rates from " + ex_rates["date"];
+							document.getElementById("showEXrate").innerHTML = "EUR: 1.0 <--> \n" + pick +": "+
 							ex_rates["rates"][pick];
 						}
 						else if (data.readyState == 4 && data.status != 200) {
@@ -34,42 +62,110 @@
 				}
 			</script>
 	</head>
-	<body>
+	<style>
+		body {
+			
+			background-color: #D3E8EA;
+			background-image: url("exchange2.jpg");
+		}
+		#questions {
+			background-color: #D3E8EA;
+			border: 3px solid black;
+			width: 50%;
+			padding: 15px;
+		}
+		#banner {
+			background-color: #D3E8EA;
+			border: 3px solid black;
+			width: 50%;
+			padding: 15px;
+		}
+		#showEXrate {
+			font-family: sans-serif;
+			color: #D3E8EA;
+			text-shadow: 
+				-1px -1px 0 #000,
+				1px -1px 0 #000,
+				-1px 1px 0 #000,
+				1px 1px 0 #000;
+			
+		}
+		#input{
+			display: inline-block;
+			background-color: #D3E8EA;
+			border: 3px solid black;
+			width: 30%;
+			padding: 15px;
+		}
+		#Exdate{
+			font-family: sans-serif;
+			color: #D3E8EA;
+			text-shadow: 
+				-1px -1px 0 #000,
+				1px -1px 0 #000,
+				-1px 1px 0 #000,
+				1px 1px 0 #000;	
+		}
+		h3 {
+			color: #D3E8EA;
+		}
+		img {
+			display: inline-block;
+			align-content: right;
+			border: 3px solid black;
+		}
 		
-		<h1 align="center">Exchange Rates</h1>
-		<form align="center">
-				Choose a Currency<select id="pick_Curr">
-						<option value="AUD">AUD - Australian Dollar</option>
-						<option value="BRL">BRL - Brazilian Real</option>
-						<option value="GBP">GBP - British Pound</option>
-						<option value="CAD">CAD - Canadian Dollar</option>
-						<option value="EUR">EUR - Euro</option>
-						<option value="HKD">HKD - Hong Kong Dollar</option>
-						<option value="INR">INR - Indian Rupee</option>
-						<option value="JPY">JPY - Japanese Yen</option>
-						<option value="KZT">KZT - Kazakhstani Tenge</option>
-						<option value="MXN">MXN - Mexican Peso</option>
-						<option value="RUB">RUB - Russian Ruble</option>
-						<option value="SAR">SAR - Saudi Arabian Riyal</option>
-						<option value="SGD">SGD - Singapore Dollar</option>
-						<option value="ZAR">ZAR - South African Rand</option>
-						<option value="TRY">TRY - Turkish Lira</option>
-						<option value="USD">USD - US Dollar</option>
-						</select>
-						<button type="button" onclick="getCurrency()">Click</button>
+	</style>
+	<body align="center">	
+		<div align="center"><h1 id="banner">$  Currency Exchange Rates  $</h1>
+			<img src="exchange1.jpg" width=25%>
+		</div>
+		<div id="input">
+		<form align="center" id="form1">
+			Choose a Currency:
+			<select id="pick_Curr">
+				<option value="AUD">AUD - Australian Dollar</option>
+				<option value="BRL">BRL - Brazilian Real</option>
+				<option value="GBP">GBP - British Pound</option>
+				<option value="CAD">CAD - Canadian Dollar</option>
+				<option value="EUR">EUR - Euro</option>
+				<option value="HKD">HKD - Hong Kong Dollar</option>
+				<option value="INR">INR - Indian Rupee</option>
+				<option value="JPY">JPY - Japanese Yen</option>
+				<option value="KZT">KZT - Kazakhstani Tenge</option>
+				<option value="MXN">MXN - Mexican Peso</option>
+				<option value="RUB">RUB - Russian Ruble</option>
+				<option value="SAR">SAR - Saudi Arabian Riyal</option>
+				<option value="SGD">SGD - Singapore Dollar</option>
+				<option value="ZAR">ZAR - South African Rand</option>
+				<option value="TRY">TRY - Turkish Lira</option>
+				<option value="USD">USD - US Dollar</option>
+			</select>
+			<button type="button" onclick="getCurrency()">Click</button><br>
+			Choose a date after 01-01-1999:
+			<input type="date" name="bday" min="1999-01-01" id="date_" value="2019-11-12">
+			<button type="button" onclick="changeDate()">Click</button><br>
 		</form>
-		<div id="Exdate" align="center"></div>
-		<div id="showEXrate" align="center">Latest Exchange Rates</div>
+		</div>
+		<br><p1 id="Exdate" align="center"></p1>
+		<h1 id="showEXrate" align="center"></h1>
 		<hr>
-		<h3>Part II</h3>
-		<p1>I am using the Fixer.io API which provides upto date global exchange rates. I signed up for 
-			free access, so there are many additional features that I was restricted from using. Like the default base
-			currency for the exchange rates is EUR and it did not permit me to change it.<br>
-			I found the API on their website https://fixer.io/.<br>
-			Options... <br>
-			This API is useful for any applications related to international finance or trade. 
-			This API is also useful for online shopping. If you live in South Korea and are goods from India. 
-			You can use the API can find the exchange rate of the Won to Rupees.
+		<h3 align="left">Part II</h3>
+	<div id="questions"> 
+		<p1>- 	I am using the Fixer.io API which provides upto date global exchange rates.
+				I signed up for free access, so there are many additional features that I was 
+				restricted from using. Like the default base currency for the exchange rates
+				is EUR and it did not permit me to change it.
+		<br><br>
+		- 	I found the API on their website https://fixer.io/.<br><br>
+		- 	Of the limited features I had access to, there were two endpoints that offered
+				options for the latest data or historical data dating back to 1999. 
+		<br><br>
+		- 	This API is also useful for online shopping. If you live in Mexico and 
+				are ordering goods from India. You can use the API can find the exchange 
+				rate of Pesos to Rupees. Businesses dealing with international trade or 
+				finance would make use of this to see daily changes in the exchange rates. 
 		</p1>
+	</div>
 	</body>
 </html>
