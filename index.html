@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Comp20: Assignment 10</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script language="javascript">
+				function getCurrency() {
+					var pick = document.getElementById("pick_Curr").value;
+					data = new XMLHttpRequest();
+					console.log("1 - request object created");
+	
+					data.open("GET", "http://data.fixer.io/api/latest?access_key=439578292bebc7430c6ad9e8c3015bae&format=1");
+	
+					console.log("2 - opened request file");
+					data.onreadystatechange = function(){
+						if (data.readyState == 4 && data.status == 200){
+							result = data.responseText;
+
+							ex_rates = JSON.parse(result);
+							document.getElementById("Exdate").innerHTML = "Exchange Rates from " + ex_rates["date"];
+							document.getElementById("showEXrate").innerHTML = "Team Name: " + 
+							ex_rates["rates"][pick];
+						}
+						else if (data.readyState == 4 && data.status != 200) {
+							document.getElementById("showEXrate").innerHTML = "Error";
+						}
+						else if (data.readyState == 3){
+							document.getElementById("showEXrate").innerHTML = "Nope";
+						}
+					}
+				data.send();
+				console.log("4 - Request sent");
+				}
+			</script>
+	</head>
+	<body>
+		
+		<h1 align="center">Exchange Rates</h1>
+		<form align="center">
+				Choose a Currency<select id="pick_Curr">
+						<option value="AUD">AUD - Australian Dollar</option>
+						<option value="BRL">BRL - Brazilian Real</option>
+						<option value="GBP">GBP - British Pound</option>
+						<option value="CAD">CAD - Canadian Dollar</option>
+						<option value="EUR">EUR - Euro</option>
+						<option value="HKD">HKD - Hong Kong Dollar</option>
+						<option value="INR">INR - Indian Rupee</option>
+						<option value="JPY">JPY - Japanese Yen</option>
+						<option value="KZT">KZT - Kazakhstani Tenge</option>
+						<option value="MXN">MXN - Mexican Peso</option>
+						<option value="RUB">RUB - Russian Ruble</option>
+						<option value="SAR">SAR - Saudi Arabian Riyal</option>
+						<option value="SGD">SGD - Singapore Dollar</option>
+						<option value="ZAR">ZAR - South African Rand</option>
+						<option value="TRY">TRY - Turkish Lira</option>
+						<option value="USD">USD - US Dollar</option>
+						</select>
+						<button type="button" onclick="getCurrency()">Click</button>
+		</form>
+		<div id="Exdate" align="center"></div>
+		<div id="showEXrate" align="center">Latest Exchange Rates</div>
+		<hr>
+		<h3>Part II</h3>
+		<p1>I am using the Fixer.io API which provides upto date global exchange rates. I signed up for 
+			free access, so there are many additional features that I was restricted from using. Like the default base
+			currency for the exchange rates is EUR and it did not permit me to change it.<br>
+			I found the API on their website https://fixer.io/.<br>
+			Options... <br>
+			This API is useful for any applications related to international finance or trade. 
+			This API is also useful for online shopping. If you live in South Korea and are goods from India. 
+			You can use the API can find the exchange rate of the Won to Rupees.
+		</p1>
+	</body>
+</html>
